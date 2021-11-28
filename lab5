@@ -1,0 +1,96 @@
+package com;
+
+import java.util.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class Runner {
+
+  public static void main(String[] args) {
+    StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+    Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
+    SessionFactory sf = meta.getSessionFactoryBuilder().build();
+    Session session = sf.openSession();
+    Transaction tr = session.beginTransaction();
+
+    Scanner sc = new Scanner(System.in);
+    int sid,ch;
+    String name,addr;
+    Student1 st;
+    while(true) {
+      System.out.println("1. Insert data\n2. Delete data\n3. Display data");
+      System.out.println("Enter your choice: ");
+      ch = sc.nextInt();
+      switch(ch) {
+      case 1:
+        System.out.println("Enter sid,name,addr: ");
+        sid = sc.nextInt();
+        name = sc.next();
+        addr = sc.next();
+        st = new Student1();
+        st.setSid(sid);
+        st.setName(name);
+        st.setAddr(addr);
+        session.save(st);
+        tr.commit();
+        break;
+      case 2:
+        System.out.println("Enter sid: ");
+        sid = sc.nextInt();
+        st = new Student1();
+        st.setSid(sid);
+        session.delete(st);
+        tr.commit();
+        break;
+      case 3:
+        System.out.println("Displaying data...");
+        List<Student1> list = session.createQuery("from Student1").list();
+        for(Student1 s:list) {
+          System.out.println("Id: "+s.getSid());
+          System.out.println("Name: "+s.getName());
+          System.out.println("Address: "+s.getAddr());
+        }
+        break;
+      }
+    }
+  }
+
+}
+
+
+
+
+package com;
+
+import javax.persistence.*;
+
+@Entity
+@Table
+public class Student1 {
+  @Id
+  int sid;
+  public int getSid() {
+    return sid;
+  }
+  public void setSid(int sid) {
+    this.sid = sid;
+  }
+  public String getName() {
+    return name;
+  }
+  public void setName(String name) {
+    this.name = name;
+  }
+  public String getAddr() {
+    return addr;
+  }
+  public void setAddr(String addr) {
+    this.addr = addr;
+  }
+  String name,addr;
+}
