@@ -1,96 +1,137 @@
-package com;
+Write a Spring program to demonstrate:
+1) Accept the customer information and a ticket information
+2) Create beans for customer and ticket using XML based configuration
+3) With a menu driven program accept the information and display the same
 
-import java.util.*;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+Ticket.java
+package My_CustTicket;
+public class Ticket {
+int tno;
+String description;
+int price;
+Customer customer;
+public Customer getCustomer() {
+return customer;
+}
+public void setCustomer(Customer customer) {
+this.customer = customer;
+}
 
-public class Runner {
+public int getTno() {
+return tno;
+}
+public void setTno(int tno) {
+this.tno = tno;
+}
+public String getDescription() {
+return description;
+}
+public void setDescription(String description) {
+this.description = description;
+}
+public int getPrice() {
+return price;
+}
+public void setPrice(int price) {
+this.price = price;
+}
 
-  public static void main(String[] args) {
-    StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-    Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-    SessionFactory sf = meta.getSessionFactoryBuilder().build();
-    Session session = sf.openSession();
-    Transaction tr = session.beginTransaction();
+@Override
+public String toString() {
+return &quot;Ticket [tno=&quot; + tno + &quot;, description=&quot; + description +
 
-    Scanner sc = new Scanner(System.in);
-    int sid,ch;
-    String name,addr;
-    Student1 st;
-    while(true) {
-      System.out.println("1. Insert data\n2. Delete data\n3. Display data");
-      System.out.println("Enter your choice: ");
-      ch = sc.nextInt();
-      switch(ch) {
-      case 1:
-        System.out.println("Enter sid,name,addr: ");
-        sid = sc.nextInt();
-        name = sc.next();
-        addr = sc.next();
-        st = new Student1();
-        st.setSid(sid);
-        st.setName(name);
-        st.setAddr(addr);
-        session.save(st);
-        tr.commit();
-        break;
-      case 2:
-        System.out.println("Enter sid: ");
-        sid = sc.nextInt();
-        st = new Student1();
-        st.setSid(sid);
-        session.delete(st);
-        tr.commit();
-        break;
-      case 3:
-        System.out.println("Displaying data...");
-        List<Student1> list = session.createQuery("from Student1").list();
-        for(Student1 s:list) {
-          System.out.println("Id: "+s.getSid());
-          System.out.println("Name: "+s.getName());
-          System.out.println("Address: "+s.getAddr());
-        }
-        break;
-      }
-    }
-  }
+&quot;, price=&quot; + price + &quot;, customer - Number =&quot; + customer.custno
++ &quot; customer - name =&quot;+customer.custname+&quot;]&quot;;
+
+}
+}
+
+Customer.java
+
+package My_CustTicket;
+public class Customer {
+int custno;
+String custname;
+public int getCustno() {
+return custno;
+}
+public void setCustno(int custno) {
+this.custno = custno;
+}
+public String getCustname() {
+return custname;
+}
+public void setCustname(String custname) {
+this.custname = custname;
+}
 
 }
 
+CustTick_Main.java
+package My_CustTicket;
+import java.util.Scanner;
+import org.springframework.context.ApplicationContext;
+import
+org.springframework.context.support.ClassPathXmlApplicationContext;
+public class CustTick_Main {
 
+public static void main(String[] args) {
+// TODO Auto-generated method stub
+ApplicationContext ac = new
+ClassPathXmlApplicationContext(&quot;beans.xml&quot;);
 
+Customer c = ac.getBean(&quot;customer&quot;,Customer.class);
+System.out.println(&quot;Enter the customer details&quot;);
+System.out.println(&quot;enter the customer no&quot;);
+Scanner sc = new Scanner(System.in);
+c.setCustno(sc.nextInt());
+System.out.println(&quot;enter the customer name&quot;);
+c.setCustname(sc.next());
+System.out.println(&quot;Enter Ticket Details&quot;);
+System.out.println(&quot;Enter Ticket No&quot;);
+Ticket t = ac.getBean(&quot;tick&quot;,Ticket.class);
 
-package com;
+// t.setCustomer(c);
+t.setTno(sc.nextInt());
+System.out.println(&quot;Enter Ticket Description&quot;);
+t.setDescription(sc.next());
+System.out.println(&quot;Enter Ticket price&quot;);
+t.setPrice(sc.nextInt());
+System.out.println(t.toString());
 
-import javax.persistence.*;
-
-@Entity
-@Table
-public class Student1 {
-  @Id
-  int sid;
-  public int getSid() {
-    return sid;
-  }
-  public void setSid(int sid) {
-    this.sid = sid;
-  }
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
-  public String getAddr() {
-    return addr;
-  }
-  public void setAddr(String addr) {
-    this.addr = addr;
-  }
-  String name,addr;
 }
+}
+
+Beans.xml
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+&lt;bean id=&quot;customer&quot; class=&quot;My_CustTicket.Customer&quot;&gt;
+&lt;!-- collaborators and configuration for this bean go here --&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;tick&quot; class=&quot;My_CustTicket.Ticket&quot; scope=&quot;prototype&quot;&gt;
+&lt;property name=&quot;customer&quot; ref=&quot;customer&quot;/&gt;
+&lt;!-- collaborators and configuration for this bean go here --&gt;
+&lt;/bean&gt;
+&lt;!-- more bean definitions go here --&gt;
+
+&lt;/beans&gt;
+
+Expected Output:
+
+Enter the customer details
+enter the customer no
+12
+enter the customer name
+asdfasd
+Enter Ticket Details
+Enter Ticket No
+25
+Enter Ticket Description
+asdfasdfd
+Enter Ticket price
+25444
+Ticket [tno=25, description=asdfasdfd, price=25444, customer - Number =12
+customer - name =asdfasd]
