@@ -1,0 +1,234 @@
+Program No 6:
+Write a Spring JAVA program to display student details with marks
+Student.java
+package My_StudMarks;
+
+public class Student {
+	String usn, name;
+	int semester;
+	Marks marks;
+	
+	public String getUsn() {
+		return usn;
+	}
+	public void setUsn(String usn) {
+		this.usn = usn;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getSemester() {
+		return semester;
+	}
+	public void setSemester(int semester) {
+		this.semester = semester;
+	}
+	public Marks getMarks() {
+		return marks;
+	}
+	public void setMarks(Marks marks) {
+		this.marks = marks;
+	}
+	@Override
+	public String toString() {
+		return "Student [usn=" + usn + ", name=" + name + ", semester=" + semester + ", "
+				+ "\nTest1=" + marks.getTest1() + 
+				"\nTest2=" + marks.getTest2() +
+				"\nTest3=" + marks.getTest3() +
+				"\nAssignment 1=" + marks.getAss1() +
+				"\nAssignment 2=" + marks.getAss2() +
+				"\nQuiz 1=" + marks.getQuiz1() +
+				"\nQuiz 2=" + marks.getQuiz2() +
+				"\nTotal Marks =" + marks.Calculate() +
+				"]";
+	}
+}
+
+
+Marks.java
+package My_StudMarks;
+
+public class Marks {
+	int intno;
+	int test1,test2,test3,ass1, ass2, quiz1,quiz2,totalmarks;
+	public int getIntno() {
+		return intno;
+	}
+	public void setIntno(int intno) {
+		this.intno = intno;
+	}
+	public int getTest1() {
+		return test1;
+	}
+	public void setTest1(int test1) {
+		this.test1 = test1;
+	}
+	public int getTest2() {
+		return test2;
+	}
+	public void setTest2(int test2) {
+		this.test2 = test2;
+	}
+	public int getTest3() {
+		return test3;
+	}
+	public void setTest3(int test3) {
+		this.test3 = test3;
+	}
+	public int getAss1() {
+		return ass1;
+	}
+	public void setAss1(int ass1) {
+		this.ass1 = ass1;
+	}
+	public int getAss2() {
+		return ass2;
+	}
+	public void setAss2(int ass2) {
+		this.ass2 = ass2;
+	}
+	public int getQuiz1() {
+		return quiz1;
+	}
+	public void setQuiz1(int quiz1) {
+		this.quiz1 = quiz1;
+	}
+	public int getQuiz2() {
+		return quiz2;
+	}
+	public void setQuiz2(int quiz2) {
+		this.quiz2 = quiz2;
+	}
+	public int getTotalmarks() {
+		return totalmarks;
+	}
+	public void setTotalmarks(int totalmarks) {
+		this.totalmarks = totalmarks;
+	}
+	public int Calculate() {
+		// TODO Auto-generated method stub
+		int cal = (test1+test2+test3)/3+(quiz1+quiz2)+(ass1+ass2);
+		return cal;
+	}
+}
+
+Bean_Config.java
+package My_StudMarks;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class Bean_Config {
+	
+	@Bean
+	public Student get_Student() {
+		Student s = new Student();
+		s.setMarks(get_Marks());
+		return s;
+	}
+	
+	@Bean
+	public Marks get_Marks() {
+		return new Marks();
+	}
+	
+
+}
+
+
+StudMark_Main.java
+
+package My_StudMarks;
+
+import java.util.Scanner;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class StudMark_Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		ApplicationContext ac = new AnnotationConfigApplicationContext(Bean_Config.class);
+		
+		Student s = ac.getBean("get_Student",Student.class);
+		Marks m = ac.getBean("get_Marks", Marks.class);
+		
+		System.out.println("Enter the Student Details: ");
+		System.out.println("Enter the student usn");
+		Scanner sc = new Scanner(System.in);
+		s.setUsn(sc.next());
+		System.out.println("Enter the student name");
+		s.setName(sc.next());
+		System.out.println("Enter the student semester");
+		s.setSemester(sc.nextInt());
+		
+		System.out.println("Enter the Student Marks: ");
+		System.out.println("Enter the Test 1");
+		m.setTest1(sc.nextInt());
+		System.out.println("Enter the Test 2");
+		m.setTest2(sc.nextInt());
+		System.out.println("Enter the Test 3");
+		m.setTest3(sc.nextInt());
+		
+		System.out.println("Enter the Assignment 1");
+		m.setAss1(sc.nextInt());
+		System.out.println("Enter the Assignment 2");
+		m.setAss2(sc.nextInt());
+		System.out.println("Enter the Quiz 1");
+		m.setQuiz1(sc.nextInt());
+		System.out.println("Enter the Quiz 2");
+		m.setQuiz2(sc.nextInt());
+		
+
+		System.out.println(s.toString());
+		
+		
+
+	}
+
+}
+
+
+
+Expected Output:
+
+Enter the Student Details: 
+Enter the student usn
+
+12
+Enter the student name
+sdfsdf
+Enter the student semester
+3
+Enter the Student Marks: 
+Enter the Test 1
+12
+Enter the Test 2
+23
+Enter the Test 3
+25
+Enter the Assignment 1
+12
+Enter the Assignment 2
+10
+Enter the Quiz 1
+5
+Enter the Quiz 2
+6
+Student [usn=12, name=sdfsdf, semester=3, 
+Test1=12
+Test2=23
+Test3=25
+Assignment 1=12
+Assignment 2=10
+Quiz 1=5
+Quiz 2=6
+Total Marks =53]
+
