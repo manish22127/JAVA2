@@ -1,0 +1,33 @@
+//Display.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+${product_id }
+${product_price }
+</body>
+</html>
+
+
+//Product.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="display">
+${error}  id<input type="text" name="product_id"><br>price<input type="text" name="product_price">
+<input type="submit" value="submit">
+</form>
+</body>
+</html>
