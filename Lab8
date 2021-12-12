@@ -31,3 +31,42 @@ ${error}  id<input type="text" name="product_id"><br>price<input type="text" nam
 </form>
 </body>
 </html>
+
+
+//controller.java
+package contro;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class contoller {
+	@RequestMapping("/")
+	public String product()
+	{
+		return "product";
+	}
+	
+	@RequestMapping("/display")
+	public String display(@RequestParam String product_id,@RequestParam String product_price,Model m) 
+	{
+		
+		if(product_id.length()<10)
+		{
+			m.addAttribute("error","limit exceded");
+			return "product";
+		}
+		else 
+		{
+		m.addAttribute("product_id",product_id );
+		m.addAttribute("product_price",product_price );
+		return "display";
+		}
+	}
+	
+	
+
+}
