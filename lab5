@@ -1,3 +1,4 @@
+Program No 5:
 Write a Spring program to demonstrate:
 1) Accept the customer information and a ticket information
 2) Create beans for customer and ticket using XML based configuration
@@ -5,119 +6,132 @@ Write a Spring program to demonstrate:
 
 Ticket.java
 package My_CustTicket;
+
 public class Ticket {
-int tno;
-String description;
-int price;
-Customer customer;
-public Customer getCustomer() {
-return customer;
-}
-public void setCustomer(Customer customer) {
-this.customer = customer;
+	int tno;
+	String description;
+	int price;
+	Customer customer;
+	
+	public Customer getCustomer() {
+		return customer;
+	}
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	
+	
+	public int getTno() {
+		return tno;
+	}
+	public void setTno(int tno) {
+		this.tno = tno;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Ticket [tno=" + tno + ", description=" + description + ", price=" + price + ", customer - Number =" + customer.custno
+				+ " customer - name ="+customer.custname+"]";
+	}
 }
 
-public int getTno() {
-return tno;
-}
-public void setTno(int tno) {
-this.tno = tno;
-}
-public String getDescription() {
-return description;
-}
-public void setDescription(String description) {
-this.description = description;
-}
-public int getPrice() {
-return price;
-}
-public void setPrice(int price) {
-this.price = price;
-}
-
-@Override
-public String toString() {
-return &quot;Ticket [tno=&quot; + tno + &quot;, description=&quot; + description +
-
-&quot;, price=&quot; + price + &quot;, customer - Number =&quot; + customer.custno
-+ &quot; customer - name =&quot;+customer.custname+&quot;]&quot;;
-
-}
-}
 
 Customer.java
 
 package My_CustTicket;
+
 public class Customer {
-int custno;
-String custname;
-public int getCustno() {
-return custno;
-}
-public void setCustno(int custno) {
-this.custno = custno;
-}
-public String getCustname() {
-return custname;
-}
-public void setCustname(String custname) {
-this.custname = custname;
-}
+	int custno;
+	String custname;
+	
+	public int getCustno() {
+		return custno;
+	}
+	public void setCustno(int custno) {
+		this.custno = custno;
+	}
+	public String getCustname() {
+		return custname;
+	}
+	public void setCustname(String custname) {
+		this.custname = custname;
+	}
+	
 
 }
 
 CustTick_Main.java
 package My_CustTicket;
+
 import java.util.Scanner;
+
 import org.springframework.context.ApplicationContext;
-import
-org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class CustTick_Main {
 
-public static void main(String[] args) {
-// TODO Auto-generated method stub
-ApplicationContext ac = new
-ClassPathXmlApplicationContext(&quot;beans.xml&quot;);
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		ApplicationContext ac = new ClassPathXmlApplicationContext("beans.xml");
+		Customer c = ac.getBean("customer",Customer.class);
+		System.out.println("Enter the customer details");
+		System.out.println("enter the customer no");
+		Scanner sc = new Scanner(System.in);
+		c.setCustno(sc.nextInt());
+		System.out.println("enter the customer name");
+		c.setCustname(sc.next());
+		
+		System.out.println("Enter Ticket Details");
+		System.out.println("Enter Ticket No");
+		Ticket t = ac.getBean("tick",Ticket.class);
+//		t.setCustomer(c);
+		t.setTno(sc.nextInt());
+		System.out.println("Enter Ticket Description");
+		t.setDescription(sc.next());
+		System.out.println("Enter Ticket price");
+		t.setPrice(sc.nextInt());
+		
+		System.out.println(t.toString());
+		
+		
 
-Customer c = ac.getBean(&quot;customer&quot;,Customer.class);
-System.out.println(&quot;Enter the customer details&quot;);
-System.out.println(&quot;enter the customer no&quot;);
-Scanner sc = new Scanner(System.in);
-c.setCustno(sc.nextInt());
-System.out.println(&quot;enter the customer name&quot;);
-c.setCustname(sc.next());
-System.out.println(&quot;Enter Ticket Details&quot;);
-System.out.println(&quot;Enter Ticket No&quot;);
-Ticket t = ac.getBean(&quot;tick&quot;,Ticket.class);
+	}
 
-// t.setCustomer(c);
-t.setTno(sc.nextInt());
-System.out.println(&quot;Enter Ticket Description&quot;);
-t.setDescription(sc.next());
-System.out.println(&quot;Enter Ticket price&quot;);
-t.setPrice(sc.nextInt());
-System.out.println(t.toString());
-
-}
 }
 
 Beans.xml
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-&lt;bean id=&quot;customer&quot; class=&quot;My_CustTicket.Customer&quot;&gt;
-&lt;!-- collaborators and configuration for this bean go here --&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;tick&quot; class=&quot;My_CustTicket.Ticket&quot; scope=&quot;prototype&quot;&gt;
-&lt;property name=&quot;customer&quot; ref=&quot;customer&quot;/&gt;
-&lt;!-- collaborators and configuration for this bean go here --&gt;
-&lt;/bean&gt;
-&lt;!-- more bean definitions go here --&gt;
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-&lt;/beans&gt;
+  <bean id="customer" class="My_CustTicket.Customer">
+    <!-- collaborators and configuration for this bean go here -->
+  </bean>
+
+  <bean id="tick" class="My_CustTicket.Ticket" scope="prototype">
+  <property name="customer" ref="customer"/>
+    <!-- collaborators and configuration for this bean go here -->
+  </bean>
+
+  <!-- more bean definitions go here -->
+
+</beans>
 
 Expected Output:
 
@@ -133,5 +147,5 @@ Enter Ticket Description
 asdfasdfd
 Enter Ticket price
 25444
-Ticket [tno=25, description=asdfasdfd, price=25444, customer - Number =12
-customer - name =asdfasd]
+Ticket [tno=25, description=asdfasdfd, price=25444, customer - Number =12 customer - name =asdfasd]
+
